@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Automation Exercise Hybrid Suite"
+       parallel="tests"
+       thread-count="2"
+       verbose="1">
+    <listeners>
+        <listener class-name="com.vachana.qa.listeners.AnnotationTransformer"/>
+    </listeners>
+    <test name="Cucumber Scenarios">
+        <classes>
+            <class name="com.vachana.qa.runners.TestRunner"/>
+        </classes>
+    </test>
+</suite>

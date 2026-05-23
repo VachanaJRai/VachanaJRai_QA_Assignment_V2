@@ -1,0 +1,27 @@
+{
+  "validRegisteredUserTemplate": {
+    "name": "QA Candidate",
+    "firstName": "QA",
+    "lastName": "Candidate",
+    "company": "Automation Exercise Labs",
+    "address1": "123 Test Street",
+    "address2": "Suite 404",
+    "country": "India",
+    "state": "Karnataka",
+    "city": "Bengaluru",
+    "zipcode": "560001",
+    "mobileNumber": "9876543210",
+    "password": "Password@123"
+  },
+  "invalidLogin": {
+    "email": "missing-user@example.invalid",
+    "password": "WrongPassword@123"
+  },
+  "payment": {
+    "nameOnCard": "QA Candidate",
+    "cardNumber": "4111111111111111",
+    "cvc": "123",
+    "expiryMonth": "12",
+    "expiryYear": "2030"
+  }
+}

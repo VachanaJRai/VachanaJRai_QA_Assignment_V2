@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{HH:mm:ss.SSS} %-5level [%t] %c{1.} - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <RollingFile name="FrameworkLog"
+                     fileName="target/logs/framework.log"
+                     filePattern="target/logs/framework-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5 MB"/>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.openqa.selenium" level="WARN"/>
+        <Logger name="io.netty" level="WARN"/>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FrameworkLog"/>
+        </Root>
+    </Loggers>
+</Configuration>
