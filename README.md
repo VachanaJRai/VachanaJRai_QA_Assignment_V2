@@ -241,39 +241,6 @@ AI assistance was used to accelerate framework scaffolding, documentation struct
 - Add Jenkins pipeline parity for non-GitHub shops.
 - Add database validation only if the application exposes a safe test database or seeded environment.
 
-## Interview Questions
-
-1. How does Selenium WebDriver differ from JavaScript executor based interaction?
-2. How would you debug `ElementClickInterceptedException` on an ad-heavy site?
-3. Why should implicit waits be avoided in a modern framework?
-4. How does Cucumber scenario isolation work with TestNG parallel execution?
-5. What belongs in page objects versus step definitions?
-6. How would you design test data for public shared environments?
-7. How do you decide whether a flaky test should be retried or fixed?
-8. Why assert both HTTP status and business `responseCode`?
-9. How would you validate JSON schema and still keep tests resilient?
-10. What are the risks of running UI tests in parallel against one public environment?
-11. How would you add cross-browser support without duplicating tests?
-12. What should be logged in test automation, and what should be masked?
-13. How do Cucumber tags help CI pipeline design?
-14. What should a framework do when a prerequisite account creation API fails?
-15. How would you scale this framework for multiple teams?
-
-## Live Coding and Change Requests
-
-| Request | Files likely to change | Implementation approach |
-|---|---|---|
-| Add Safari or remote browser support | `driver/DriverFactory.java`, `config.properties` | Add browser enum, options/capabilities, and remote URL handling. |
-| Add stronger retry rules | `listeners/RetryAnalyzer.java`, `config.properties` | Retry only known transient exceptions and log retry reason. |
-| Add parallel execution tuning | `pom.xml`, `testng.xml`, `TestRunner.java` | Adjust data provider thread count and ensure all shared state remains thread-local. |
-| Add Docker execution | `Dockerfile`, `docker-compose.yml`, `.github/workflows/*` | Run Maven tests against Selenium standalone Chrome or Grid. |
-| Add Jenkins | `Jenkinsfile` | Reuse Maven commands, archive `target` reports, publish HTML. |
-| Add API token handling | `ApiClient.java`, `config.properties`, CI secrets | Read token from env/secret and inject auth header through request spec. |
-| Add environment switching | `config/*.properties`, `ConfigManager.java` | Add `dev`, `qa`, `stage` property files and select with `-Denv=stage`. |
-| Add data-driven UI tests | `testdata/*.json`, step definitions, feature outlines | Keep examples business-readable and large data sets externalized. |
-| Add cloud execution | `DriverFactory.java`, CI secrets | Add BrowserStack/Sauce capabilities and credentials through secrets. |
-| Add database validation | new `db/` package, config, test data | Keep DB checks read-only and behind environment-specific config. |
-
 ## Useful Commands
 
 ```bash
