@@ -8,7 +8,11 @@ import java.util.Locale;
 public class ProductDetailsPage extends BasePage {
     private final By quantity = By.id("quantity");
     private final By addToCart = By.cssSelector("button.cart");
-    private final By viewCartInModal = By.xpath("//u[normalize-space()='View Cart']/parent::a");
+    private final By reviewName = By.id("name");
+    private final By reviewEmail = By.id("email");
+    private final By reviewText = By.id("review");
+    private final By submitReview = By.id("button-review");
+    private final By reviewSuccess = By.cssSelector("#review-section .alert-success");
 
     public boolean coreDetailsVisible() {
         if (!currentUrl().contains("/product_details/")) {
@@ -41,6 +45,18 @@ public class ProductDetailsPage extends BasePage {
     }
 
     public void viewCartFromModal() {
-        elements.click(viewCartInModal);
+        viewCartFromAddToCartModal();
+    }
+
+    public void submitReview(String name, String email, String review) {
+        elements.type(reviewName, name);
+        elements.type(reviewEmail, email);
+        elements.type(reviewText, review);
+        elements.click(submitReview);
+    }
+
+    public boolean reviewSuccessVisible() {
+        return elements.isDisplayed(reviewSuccess)
+                || elements.isDisplayed(containsText("Thank you for your review."));
     }
 }

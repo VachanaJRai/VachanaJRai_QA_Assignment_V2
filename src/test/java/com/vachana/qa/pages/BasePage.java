@@ -28,6 +28,14 @@ public abstract class BasePage {
         }
     }
 
+    protected void continueShoppingFromAddToCartModal() {
+        elements.click(By.cssSelector(".btn.btn-success.close-modal"));
+    }
+
+    protected void viewCartFromAddToCartModal() {
+        elements.click(By.xpath("//u[normalize-space()='View Cart']/parent::a"));
+    }
+
     protected By containsText(String text) {
         return By.xpath("//*[contains(normalize-space(),\"" + text + "\")]");
     }

@@ -13,15 +13,13 @@ import org.testng.Assert;
 public class RegistrationSteps {
     @When("I register a unique customer through the UI")
     public void iRegisterAUniqueCustomerThroughTheUi() {
-        Customer customer = RandomDataUtils.uniqueCustomer();
-        TestContext.put("customer", customer);
-        HomePage homePage = new HomePage();
-        homePage.goToSignupLogin();
-        new LoginSignupPage().startSignup(customer.name(), customer.email());
+        new HomePage().goToSignupLogin();
+        completeSignupForUniqueCustomer();
+    }
 
-        AccountInformationPage accountInformationPage = new AccountInformationPage();
-        Assert.assertTrue(accountInformationPage.isLoaded(), "Account information page should be visible");
-        accountInformationPage.completeRegistration(customer);
+    @When("I complete signup for a unique customer")
+    public void iCompleteSignupForAUniqueCustomer() {
+        completeSignupForUniqueCustomer();
     }
 
     @Then("the account should be created")
@@ -32,6 +30,7 @@ public class RegistrationSteps {
     @When("I continue after account creation")
     public void iContinueAfterAccountCreation() {
         new AccountInformationPage().continueAfterAccountCreated();
+        new HomePage().open();
     }
 
     @Then("I should be logged in after registration")
@@ -49,5 +48,15 @@ public class RegistrationSteps {
     public void theAccountShouldBeDeleted() {
         Assert.assertTrue(new AccountInformationPage().accountDeletedVisible(), "Account deleted confirmation should be visible");
         new HomePage().continueAfterAccountAction();
+    }
+
+    private void completeSignupForUniqueCustomer() {
+        Customer customer = RandomDataUtils.uniqueCustomer();
+        TestContext.put("customer", customer);
+        new LoginSignupPage().startSignup(customer.name(), customer.email());
+
+        AccountInformationPage accountInformationPage = new AccountInformationPage();
+        Assert.assertTrue(accountInformationPage.isLoaded(), "Account information page should be visible");
+        accountInformationPage.completeRegistration(customer);
     }
 }

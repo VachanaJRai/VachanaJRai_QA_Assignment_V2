@@ -39,6 +39,23 @@ public class ElementUtils {
         }
     }
 
+    public void clickFirstDisplayed(By locator) {
+        adHandler.dismissAdsAndOverlays();
+        WebElement element = waitUtils.until(webDriver -> webDriver.findElements(locator)
+                .stream()
+                .filter(WebElement::isDisplayed)
+                .findFirst()
+                .orElse(null));
+
+        scrollIntoView(element);
+        try {
+            element.click();
+        } catch (ElementClickInterceptedException | StaleElementReferenceException | TimeoutException exception) {
+            adHandler.dismissAdsAndOverlays();
+            jsClick(element);
+        }
+    }
+
     public void type(By locator, String value) {
         WebElement element = waitUtils.visible(locator);
         scrollIntoView(element);

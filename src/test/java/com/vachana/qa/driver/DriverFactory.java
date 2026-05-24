@@ -114,6 +114,7 @@ public final class DriverFactory {
         options.addArguments("--disable-extensions");
         options.addArguments("--disable-sync");
         options.addArguments("--dns-prefetch-disable");
+        options.setExperimentalOption("prefs", downloadPreferences());
         return options;
     }
 

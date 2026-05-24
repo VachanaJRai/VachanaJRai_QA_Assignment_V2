@@ -13,8 +13,9 @@ public class ProductsPage extends BasePage {
     private final By productNames = By.cssSelector(".features_items .productinfo p");
     private final By searchInput = By.id("search_product");
     private final By searchButton = By.id("submit_search");
-    private final By continueShoppingButton = By.cssSelector(".btn.btn-success.close-modal");
-    private final By viewCartInModal = By.xpath("//u[normalize-space()='View Cart']/parent::a");
+    private final By visibleProductAddToCartButtons = By.cssSelector(".features_items .productinfo a.add-to-cart");
+    private final By brandsSidebar = By.cssSelector(".brands-name");
+    private final By productsHeading = By.cssSelector(".features_items h2.title");
 
     public boolean isAllProductsVisible() {
         return elements.isDisplayed(allProductsTitle) && elements.elements(productCards).size() > 0;
@@ -53,11 +54,33 @@ public class ProductsPage extends BasePage {
         elements.click(product);
     }
 
+    public void addFirstVisibleProductToCart() {
+        elements.clickFirstDisplayed(visibleProductAddToCartButtons);
+    }
+
     public void continueShopping() {
-        elements.click(continueShoppingButton);
+        continueShoppingFromAddToCartModal();
     }
 
     public void viewCartFromModal() {
-        elements.click(viewCartInModal);
+        viewCartFromAddToCartModal();
+    }
+
+    public boolean brandsSidebarVisible() {
+        return elements.isDisplayed(brandsSidebar);
+    }
+
+    public void openBrand(String brandName) {
+        By brandLink = By.xpath("//div[contains(@class,'brands-name')]//a[contains(normalize-space(),\"" + brandName + "\")]");
+        elements.click(brandLink);
+    }
+
+    public boolean productsHeadingContains(String expectedText) {
+        return elements.text(productsHeading).toLowerCase(Locale.ROOT)
+                .contains(expectedText.toLowerCase(Locale.ROOT));
+    }
+
+    public boolean filteredProductsVisible() {
+        return productCount() > 0;
     }
 }

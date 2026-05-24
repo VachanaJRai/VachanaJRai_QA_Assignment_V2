@@ -12,6 +12,8 @@ public class PaymentPage extends BasePage {
     private final By expiryYear = By.cssSelector("[data-qa='expiry-year']");
     private final By payButton = By.cssSelector("[data-qa='pay-button']");
     private final By orderPlaced = By.cssSelector("[data-qa='order-placed']");
+    private final By downloadInvoice = By.cssSelector("a[href*='download_invoice']");
+    private final By continueButton = By.cssSelector("[data-qa='continue-button']");
 
     public void payWith(Map<String, Object> paymentData) {
         ensurePaymentPageIsOpen();
@@ -27,6 +29,14 @@ public class PaymentPage extends BasePage {
     public boolean orderPlacedVisible() {
         return elements.isDisplayed(orderPlaced)
                 || elements.isDisplayed(containsText("Your order has been placed successfully"));
+    }
+
+    public void downloadInvoice() {
+        elements.click(downloadInvoice);
+    }
+
+    public void continueAfterOrder() {
+        elements.click(continueButton);
     }
 
     private void ensurePaymentPageIsOpen() {

@@ -9,6 +9,11 @@ public class CartPage extends BasePage {
     private final By firstDelete = By.cssSelector("#cart_info_table tbody tr[id^='product-']:first-child .cart_delete a");
     private final By checkoutButton = By.cssSelector("a.check_out");
     private final By emptyCartMessage = By.xpath("//*[contains(normalize-space(),'Cart is empty')]");
+    private final By registerLoginFromCheckoutPrompt = By.cssSelector("#checkoutModal a[href='/login']");
+
+    public void open() {
+        openPath("/view_cart");
+    }
 
     public boolean isCartVisible() {
         return currentUrl().contains("/view_cart") && (elements.isDisplayed(cartTable) || elements.isDisplayed(emptyCartMessage));
@@ -32,5 +37,18 @@ public class CartPage extends BasePage {
 
     public void proceedToCheckout() {
         elements.click(checkoutButton);
+    }
+
+    public boolean checkoutLoginPromptVisible() {
+        return elements.isDisplayed(registerLoginFromCheckoutPrompt)
+                || elements.isDisplayed(containsText("Register / Login account to proceed on checkout."));
+    }
+
+    public void chooseRegisterLoginFromCheckoutPrompt() {
+        elements.click(registerLoginFromCheckoutPrompt);
+    }
+
+    public boolean checkoutUnavailableWhenEmpty() {
+        return isCartEmpty() && !elements.isDisplayed(checkoutButton);
     }
 }

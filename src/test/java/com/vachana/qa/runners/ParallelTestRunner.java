@@ -12,6 +12,7 @@ import org.testng.annotations.Listeners;
         glue = {"com.vachana.qa.steps", "com.vachana.qa.hooks"},
         plugin = {
                 "pretty",
+                "com.vachana.qa.reports.ExtentCucumberStepLogger",
                 "html:target/cucumber-reports/cucumber-parallel.html",
                 "json:target/cucumber-reports/cucumber-parallel.json",
                 "junit:target/cucumber-reports/cucumber-parallel.xml",

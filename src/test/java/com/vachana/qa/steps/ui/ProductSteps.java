@@ -1,9 +1,12 @@
 package com.vachana.qa.steps.ui;
 
+import com.vachana.qa.context.TestContext;
+import com.vachana.qa.models.Customer;
 import com.vachana.qa.pages.CartPage;
 import com.vachana.qa.pages.HomePage;
 import com.vachana.qa.pages.ProductDetailsPage;
 import com.vachana.qa.pages.ProductsPage;
+import com.vachana.qa.utils.RandomDataUtils;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.testng.Assert;
@@ -56,11 +59,23 @@ public class ProductSteps {
         new ProductsPage().viewCartFromModal();
     }
 
+    @When("I add the first visible product to the cart")
+    public void iAddTheFirstVisibleProductToTheCart() {
+        new ProductsPage().addFirstVisibleProductToCart();
+    }
+
     @Then("the cart should contain {int} products")
     public void theCartShouldContainProducts(int expectedCount) {
         CartPage cartPage = new CartPage();
         Assert.assertTrue(cartPage.isCartVisible(), "Cart page should be visible");
         Assert.assertEquals(cartPage.itemCount(), expectedCount, "Unexpected product count in cart");
+    }
+
+    @Then("the cart should contain at least {int} product(s)")
+    public void theCartShouldContainAtLeastProducts(int minimumCount) {
+        CartPage cartPage = new CartPage();
+        Assert.assertTrue(cartPage.isCartVisible(), "Cart page should be visible");
+        Assert.assertTrue(cartPage.itemCount() >= minimumCount, "Cart should contain at least " + minimumCount + " product(s)");
     }
 
     @When("I set product quantity to {int} from product details and add it to cart")
@@ -84,5 +99,59 @@ public class ProductSteps {
     @Then("the cart should be empty")
     public void theCartShouldBeEmpty() {
         Assert.assertTrue(new CartPage().isCartEmpty(), "Cart should be empty after removing the product");
+    }
+
+    @Then("the brands sidebar should be visible")
+    public void theBrandsSidebarShouldBeVisible() {
+        Assert.assertTrue(new ProductsPage().brandsSidebarVisible(), "Brands sidebar should be visible");
+    }
+
+    @When("I open brand {string}")
+    public void iOpenBrand(String brandName) {
+        new ProductsPage().openBrand(brandName);
+    }
+
+    @Then("the brand products heading should contain {string}")
+    public void theBrandProductsHeadingShouldContain(String expectedHeading) {
+        Assert.assertTrue(new ProductsPage().productsHeadingContains(expectedHeading),
+                "Brand products heading should contain expected brand");
+    }
+
+    @Then("filtered products should be visible")
+    public void filteredProductsShouldBeVisible() {
+        Assert.assertTrue(new ProductsPage().filteredProductsVisible(), "Filtered products should be visible");
+    }
+
+    @When("I remember the current cart product count")
+    public void iRememberTheCurrentCartProductCount() {
+        TestContext.put("cartProductCount", new CartPage().itemCount());
+    }
+
+    @Then("the cart should still contain the remembered products")
+    public void theCartShouldStillContainTheRememberedProducts() {
+        int expectedCount = TestContext.get("cartProductCount", Integer.class);
+        CartPage cartPage = new CartPage();
+        Assert.assertTrue(cartPage.isCartVisible(), "Cart page should be visible");
+        Assert.assertEquals(cartPage.itemCount(), expectedCount, "Cart product count should persist after login");
+    }
+
+    @When("I submit a review for the product")
+    public void iSubmitAReviewForTheProduct() {
+        Customer customer = RandomDataUtils.uniqueCustomer();
+        new ProductDetailsPage().submitReview(
+                customer.fullName(),
+                customer.email(),
+                "The product detail page accepted this fake automation review."
+        );
+    }
+
+    @Then("the review success message should be visible")
+    public void theReviewSuccessMessageShouldBeVisible() {
+        Assert.assertTrue(new ProductDetailsPage().reviewSuccessVisible(), "Review success message should be visible");
+    }
+
+    @When("I add a product from recommended items to the cart")
+    public void iAddAProductFromRecommendedItemsToTheCart() {
+        new HomePage().addFirstRecommendedItemToCart();
     }
 }

@@ -25,6 +25,10 @@ public final class ScreenshotUtils {
         return saveScenarioScreenshot(scenarioName, String.format("step_%03d", stepNumber));
     }
 
+    public static Path saveStepScreenshot(String scenarioName, String stepName, int stepNumber) {
+        return saveScenarioScreenshot(scenarioName, String.format("step_%03d_%s", stepNumber, safeName(stepName)));
+    }
+
     public static Path saveScenarioScreenshot(String scenarioName, String filePrefix) {
         try {
             Path screenshotDir = ConfigManager.getPath("screenshot.dir", "target/screenshots")
@@ -42,6 +46,7 @@ public final class ScreenshotUtils {
     }
 
     private static String safeName(String value) {
-        return value.replaceAll("[^a-zA-Z0-9._-]", "_");
+        String safeValue = value.replaceAll("[^a-zA-Z0-9._-]", "_");
+        return safeValue.length() > 90 ? safeValue.substring(0, 90) : safeValue;
     }
 }

@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.function.Function;
 
 public class WaitUtils {
     private final WebDriver driver;
@@ -42,6 +43,10 @@ public class WaitUtils {
     public void pageLoaded() {
         driverWait().until(webDriver -> "complete".equals(
                 ((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
+    }
+
+    public <T> T until(Function<WebDriver, T> condition) {
+        return driverWait().until(condition);
     }
 
     private WebDriverWait driverWait() {

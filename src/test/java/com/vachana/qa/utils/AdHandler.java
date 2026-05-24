@@ -13,7 +13,8 @@ public class AdHandler {
             By.cssSelector("button[aria-label='Close']"),
             By.cssSelector("div[aria-label='Close ad']"),
             By.cssSelector("[id*='dismiss-button']"),
-            By.cssSelector(".modal.show button.close")
+            By.cssSelector(".modal.show button.close"),
+            By.xpath("//*[normalize-space()='Close']")
     );
 
     private final WebDriver driver;
@@ -33,7 +34,11 @@ public class AdHandler {
             for (WebElement element : driver.findElements(closeButton)) {
                 try {
                     if (element.isDisplayed() && element.isEnabled()) {
-                        element.click();
+                        try {
+                            element.click();
+                        } catch (RuntimeException exception) {
+                            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+                        }
                     }
                 } catch (RuntimeException ignored) {
                     driver.switchTo().defaultContent();

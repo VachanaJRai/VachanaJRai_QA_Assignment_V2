@@ -53,4 +53,61 @@ public class ContactSubscriptionCategorySteps {
     public void theCategoryProductsHeadingShouldContain(String expectedHeading) {
         Assert.assertTrue(new CategoryPage().headingContains(expectedHeading), "Category products heading should contain expected category");
     }
+
+    @When("I move the home carousel to the next banner")
+    public void iMoveTheHomeCarouselToTheNextBanner() {
+        HomePage homePage = new HomePage();
+        int beforeIndex = homePage.activeCarouselIndex();
+        int afterIndex = homePage.moveToNextCarouselBanner();
+        TestContext.put("carouselBefore", beforeIndex);
+        TestContext.put("carouselAfter", afterIndex);
+    }
+
+    @Then("the home carousel banner should change")
+    public void theHomeCarouselBannerShouldChange() {
+        int beforeIndex = TestContext.get("carouselBefore", Integer.class);
+        int afterIndex = TestContext.get("carouselAfter", Integer.class);
+        Assert.assertNotEquals(afterIndex, beforeIndex, "Carousel should move to a different banner");
+    }
+
+    @When("I move the home carousel to the previous banner")
+    public void iMoveTheHomeCarouselToThePreviousBanner() {
+        HomePage homePage = new HomePage();
+        int beforeIndex = homePage.activeCarouselIndex();
+        int afterIndex = homePage.moveToPreviousCarouselBanner();
+        TestContext.put("carouselPreviousBefore", beforeIndex);
+        TestContext.put("carouselPreviousAfter", afterIndex);
+    }
+
+    @Then("the home carousel banner should change again")
+    public void theHomeCarouselBannerShouldChangeAgain() {
+        int beforeIndex = TestContext.get("carouselPreviousBefore", Integer.class);
+        int afterIndex = TestContext.get("carouselPreviousAfter", Integer.class);
+        Assert.assertNotEquals(afterIndex, beforeIndex, "Carousel should move back to a different banner");
+    }
+
+    @When("I scroll down to the footer")
+    public void iScrollDownToTheFooter() {
+        new HomePage().scrollToFooter();
+    }
+
+    @Then("the subscription section should be visible")
+    public void theSubscriptionSectionShouldBeVisible() {
+        Assert.assertTrue(new HomePage().subscriptionSectionVisible(), "Subscription section should be visible");
+    }
+
+    @When("I click the scroll up arrow")
+    public void iClickTheScrollUpArrow() {
+        new HomePage().clickScrollUpArrow();
+    }
+
+    @When("I scroll up to the top without using the arrow")
+    public void iScrollUpToTheTopWithoutUsingTheArrow() {
+        new HomePage().scrollToTopWithoutArrow();
+    }
+
+    @Then("the home page hero text should be visible")
+    public void theHomePageHeroTextShouldBeVisible() {
+        Assert.assertTrue(new HomePage().heroTextVisible(), "Home page hero text should be visible");
+    }
 }

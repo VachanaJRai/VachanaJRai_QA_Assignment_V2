@@ -11,6 +11,7 @@ import com.vachana.qa.driver.DriverFactory;
 import com.vachana.qa.models.Customer;
 import com.vachana.qa.reports.ExtentReportManager;
 import com.vachana.qa.reports.ExtentTestManager;
+import com.vachana.qa.reports.StepLogContext;
 import com.vachana.qa.utils.LoggerUtils;
 import com.vachana.qa.utils.RandomDataUtils;
 import com.vachana.qa.utils.ScreenshotUtils;
@@ -59,12 +60,16 @@ public class Hooks {
         int stepNumber = TestContext.find("stepCounter", Integer.class).orElse(0) + 1;
         TestContext.put("stepCounter", stepNumber);
 
-        Path screenshot = ScreenshotUtils.saveStepScreenshot(scenario.getName(), stepNumber);
+        String stepName = StepLogContext.currentStepDisplayName(stepNumber);
+        Path screenshot = ScreenshotUtils.saveStepScreenshot(scenario.getName(), stepName, stepNumber);
         LOGGER.info("Saved step screenshot: {}", screenshot.toAbsolutePath());
 
         try {
+            String screenshotLabel = StepLogContext.currentStepIsValidation()
+                    ? String.format("Validation screenshot %03d | %s", stepNumber, stepName)
+                    : String.format("Step screenshot %03d | %s", stepNumber, stepName);
             ExtentTestManager.getTest()
-                    .info(String.format("Step %03d screenshot", stepNumber))
+                    .info(screenshotLabel)
                     .addScreenCaptureFromPath(screenshot.toAbsolutePath().toString());
         } catch (Exception exception) {
             LOGGER.warn("Unable to attach step screenshot to Extent report: {}", exception.getMessage());
@@ -88,7 +93,13 @@ public class Hooks {
                     LOGGER.warn("Unable to attach failure screenshot to Extent report: {}", exception.getMessage());
                 }
             } else {
+                Path screenshot = ScreenshotUtils.saveScenarioScreenshot(scenario.getName(), "final_success");
                 ExtentTestManager.getTest().pass("Scenario passed");
+                try {
+                    ExtentTestManager.getTest().addScreenCaptureFromPath(screenshot.toAbsolutePath().toString());
+                } catch (Exception exception) {
+                    LOGGER.warn("Unable to attach final success screenshot to Extent report: {}", exception.getMessage());
+                }
             }
             DriverFactory.quitDriver();
         }
@@ -114,6 +125,7 @@ public class Hooks {
     @After(order = 0)
     public void clearScenarioContext(Scenario scenario) {
         LOGGER.info("Finished scenario: {} status={}", scenario.getName(), scenario.getStatus());
+        StepLogContext.clear();
         ExtentTestManager.removeTest();
         TestContext.clear();
     }
